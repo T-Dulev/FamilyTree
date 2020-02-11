@@ -1,0 +1,14 @@
+H:\VS2013\007 Family tree\FamilyTree\bin\Debug\FamilyTree.exe.config
+H:\VS2013\007 Family tree\FamilyTree\bin\Debug\FamilyTree.exe
+H:\VS2013\007 Family tree\FamilyTree\bin\Debug\FamilyTree.pdb
+H:\VS2013\007 Family tree\FamilyTree\obj\Debug\FamilyTree.csprojAssemblyReference.cache
+H:\VS2013\007 Family tree\FamilyTree\obj\Debug\FamilyTree.FamilyTreeForm.resources
+H:\VS2013\007 Family tree\FamilyTree\obj\Debug\FamilyTree.Properties.Resources.resources
+H:\VS2013\007 Family tree\FamilyTree\obj\Debug\FamilyTree.csproj.GenerateResource.cache
+H:\VS2013\007 Family tree\FamilyTree\obj\Debug\FamilyTree.exe
+H:\VS2013\007 Family tree\FamilyTree\obj\Debug\FamilyTree.pdb
+H:\VS2013\007 Family tree\FamilyTree\bin\Debug\GeneGenie.Gedcom.dll
+H:\VS2013\007 Family tree\FamilyTree\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+H:\VS2013\007 Family tree\FamilyTree\bin\Debug\System.Text.Encoding.CodePages.dll
+H:\VS2013\007 Family tree\FamilyTree\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+H:\VS2013\007 Family tree\FamilyTree\obj\Debug\FamilyTree.csproj.CopyComplete
