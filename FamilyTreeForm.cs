@@ -29,30 +29,66 @@ namespace FamilyTree
             var gedcomData = GedcomRecordReader.CreateReader("J:\\Family\\dulev2020.ged");
             toolStripLabel.Text = "Loaded " + gedcomData.Database.Count + " records";
 
-            var db = new GedcomDatabase();
+            //var db = new GedcomDatabase();
 
             var individual = gedcomData.Database.Individuals.Select(f => f.Names).ToList();
 
             var ID = 0;
-            foreach (var item in individual)
+            //foreach (var item in individual)
+            //{
+            //    foreach (var itemPerson in item)
+            //    {
+            //        ID++;
+            //        listPersons.Items.Add(new ListViewItem(new string[4] { ID.ToString(), itemPerson.Name, "", "" }));
+            //    }
+            //}
+
+
+            foreach (var item in gedcomData.Database.Individuals)
             {
-                foreach (var itemPerson in item)
+                var parent = MergeList(item.ChildIn);
+                var parentID = from db in gedcomData.Database.Families
+                               where db.XRefID == parent //&& db.Husband != null
+                               select db.Husband;
+
+                string parentFound = "";
+                string parentFullName = "";
+                if (parentID.Count() > 0)
+                {
+                    parentFound = parentID.First();
+                    var parentName = from db in gedcomData.Database.Individuals
+                                     where db.XRefID == parentFound && (db.Names != null)
+                                     select db.Names;
+                    if (parentName.Count() > 0)
+                        foreach (var item2 in parentName)
+                        {
+                            if (item2.Count > 0)
+                            {
+                                parentFullName = item2.First().Name;
+                                break;
+                            }
+                        }
+                }
+                var res = gedcomData.Database.Individuals.FindAll(x => (x.XRefID == parentFound));
+
+                foreach (var itemPerson in item.Names)
                 {
                     ID++;
-                    listPersons.Items.Add(new ListViewItem(new string[4] { ID.ToString(), itemPerson.Name, "", "" }));
+                    listPersons.Items.Add(new ListViewItem(new string[4] { ID.ToString(), itemPerson.Name, parent, parentFullName }));
+
                 }
+
             }
+        }
 
-
-            //foreach (var item in gedcomData.Database.Individuals)
+        public string MergeList(GedcomRecordList<GedcomFamilyLink> list)
+        {
+            string res = String.Join(" ", list.Select(f => f.Family));
+            //foreach (var item in list)
             //{
-            //    foreach (var itemPerson in item.Names)
-            //    {
-            //        listPersons.Items.Add(new ListViewItem(new string[4] { itemPerson.Name, itemPerson.Surname, "", "" }));
-
-            //    }
-
+            //    item.Individual
             //}
+            return res;
         }
     }
 }
