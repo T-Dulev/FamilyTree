@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GeneGenie.Gedcom.Parser;
 using GeneGenie.Gedcom;
+using System.IO;
 
 namespace FamilyTree
 {
@@ -28,7 +29,22 @@ namespace FamilyTree
 
         private void buttonLoadTree_Click(object sender, EventArgs e)
         {
-            gedcomData = GedcomRecordReader.CreateReader("J:\\Family\\dulev2020.ged");
+            // correct surnames from mariname
+            var text = File.ReadAllLines("J:\\Family\\dulev2020.ged",Encoding.Default);
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i].Contains("//"))
+                {
+                    if (text[i + 2].Contains("_MARNM"))
+                    {
+                        var surname = text[i + 2].Substring(9);
+                        text[i]=text[i].Replace("//", "/" + surname + "/");
+                    }
+                }
+            }
+            File.WriteAllLines("J:\\Family\\dulev2020.txt",text,Encoding.Default);
+
+            gedcomData = GedcomRecordReader.CreateReader("J:\\Family\\dulev2020.txt");
             toolStripLabel.Text = "Loaded " + gedcomData.Database.Count + " records";
 
             var individual = gedcomData.Database.Individuals.Select(f => f.Names).ToList();
@@ -83,10 +99,29 @@ namespace FamilyTree
             {
                 List<string> names = new List<string>();
 
-                names.Add(GetFatherName(item.XRefID));
-                names.Add(GetMotherName(item.XRefID));
+                var husband = GetPerson(item.Husband);
+                if (husband != null)
+                {
+                    foreach (var itemPerson in husband[0].Names)
+                    {
+                        //names.Add(husband[0].Names[0].Given + " " + husband[0].Names[0].Surname);
+                        names.Add(itemPerson.Given + " " + itemPerson.Surname);
+                    }
+                }
+                var wife = GetPerson(item.Wife);
+                if (wife != null)
+                {
+                    //names.Add(wife[0].Names[0].Given + " " + wife[0].Names[0].Surname);
+                    foreach (var itemPerson in wife[0].Names)
+                    {
+                        names.Add(itemPerson.Given + " " + itemPerson.Surname);
+                    }
+
+                }
+                //names.Add(GetFatherName(item.XRefID));
+                //names.Add(GetMotherName(item.XRefID)); 
                 ID++;
-                listFamily.Items.Add(new ListViewItem(new string[4] { ID.ToString(),  String.Join(", ", names), "","" }));
+                listFamily.Items.Add(new ListViewItem(new string[4] { ID.ToString(), String.Join(", ", names), "", "" }));
             }
         }
 
@@ -131,7 +166,7 @@ namespace FamilyTree
             string parentFullName = "";
 
             var parentID = from db in gedcomData.Database.Families
-                           where db.XRefID == parent //&& db.Husband != null
+                           where db.XRefID == parent
                            select db.Wife;
 
             if (parentID.Count() > 0)

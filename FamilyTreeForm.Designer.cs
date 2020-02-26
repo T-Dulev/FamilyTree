@@ -130,7 +130,7 @@
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Person";
+            this.columnHeader2.Text = "Family";
             this.columnHeader2.Width = 122;
             // 
             // columnHeader3
